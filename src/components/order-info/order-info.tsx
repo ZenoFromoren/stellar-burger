@@ -13,9 +13,7 @@ export const OrderInfo: FC = () => {
 
   const number = Number(params.number);
   const orderData = useSelector(orderSelectors.selectOrderByNumber);
-  const ingredients: TIngredient[] = useSelector(
-    ingredientsSelectors.selectIngredients
-  );
+  const ingredients = useSelector(ingredientsSelectors.selectIngredients);
 
   const dispatch = useDispatch();
 

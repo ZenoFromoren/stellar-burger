@@ -10,10 +10,7 @@ import { getUserApi } from '@api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setCookie } from '../../utils/cookie';
 
-export const getUser = createAsyncThunk('user/getUser', async () => {
-  const userData = await getUserApi();
-  return userData;
-});
+export const getUser = createAsyncThunk('user/getUser', getUserApi);
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
@@ -27,21 +24,15 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'user/registerUser',
-  async ({ email, name, password }: TRegisterData) => {
-    const userData = await registerUserApi({ email, name, password });
-    return userData;
-  }
+  registerUserApi
 );
 
 export const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({ email, name }: TRegisterData) => {
-    await updateUserApi({ email, name });
-    return { email, name };
+    const userData = await updateUserApi({ email, name });
+    return userData.user;
   }
 );
 
-export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
-  const userData = await logoutApi();
-  return userData;
-});
+export const logoutUser = createAsyncThunk('user/logoutUser', logoutApi);

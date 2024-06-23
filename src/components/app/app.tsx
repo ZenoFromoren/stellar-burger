@@ -23,7 +23,9 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const locationState = location.state?.locationState;
+  const locationState = location.state?.background;
+
+  const onModalClose = () => navigate(-1);
 
   const dispatch = useDispatch();
 
@@ -104,7 +106,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='' onClose={() => navigate(-1)}>
+              <Modal title='Детали заказа' onClose={() => onModalClose()}>
                 <OrderInfo />
               </Modal>
             }
@@ -112,7 +114,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
+              <Modal title='Детали ингредиента' onClose={() => onModalClose()}>
                 <IngredientDetails />
               </Modal>
             }
@@ -121,7 +123,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
+                <Modal title='Детали заказа' onClose={() => onModalClose()}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

@@ -23,6 +23,8 @@ export const BurgerConstructor: FC = () => {
     ingredients: ingredients
   };
 
+  const isAuthenticated = useSelector(userSelectors.selsectIsAuthenticated);
+
   const orderRequest = useSelector(orderSelectors.selectIsOrderRequest);
 
   const orderModalData = useSelector(orderSelectors.selectOrderData);
@@ -33,20 +35,20 @@ export const BurgerConstructor: FC = () => {
   const user = useSelector(userSelectors.selectUserData);
 
   const onOrderClick = () => {
-    if (!constructorItems.bun || orderRequest) return;
+    if (isAuthenticated && constructorItems.bun) {
+      const bunId: string = constructorItems.bun!._id;
+      const ingredientsIds: string[] = constructorItems.ingredients.map(
+        (ingredient: TIngredient) => ingredient._id
+      );
 
-    if (!user) {
+      const burgerData: string[] = [bunId, ...ingredientsIds, bunId];
+
+      dispatch(orderBurger(burgerData));
+    } else if (isAuthenticated && !constructorItems.bun) {
+      return;
+    } else if (!isAuthenticated) {
       navigate('/login');
     }
-
-    const bunId: string = constructorItems.bun!._id;
-    const ingredientsIds: string[] = constructorItems.ingredients.map(
-      (ingredient: TIngredient) => ingredient._id
-    );
-
-    const burgerData: string[] = [bunId, ...ingredientsIds, bunId];
-
-    dispatch(orderBurger(burgerData));
   };
 
   const closeOrderModal = () => {

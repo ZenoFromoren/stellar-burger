@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrderByNumber, orderBurger } from '../thunks/orderThunks';
+import { getUser } from '../thunks/userThunks';
 
 interface IOrderState {
   orderData: TOrder | null;
@@ -42,6 +43,9 @@ export const orderSlice = createSlice({
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
         state.orderByNumber = action.payload[0];
+      })
+      .addCase(getUser.rejected, (state) => {
+        state.isOrderRequest = false;
       });
   }
 });

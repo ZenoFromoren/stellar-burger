@@ -41,6 +41,7 @@ export const userSlice = createSlice({
   selectors: {
     selectUserData: (state) => state.userData,
     selectIsAuthChecked: (state) => state.isAuthChecked,
+    selsectIsAuthenticated: (state) => state.isAuthenticated,
     selectError: (state) => state.error
   },
   extraReducers: (builder) => {
@@ -86,7 +87,7 @@ export const userSlice = createSlice({
         state.error = null;
       })
       .addCase(getUser.pending, (state) => {
-        state.isAuthChecked = true;
+        state.isAuthChecked = false;
         state.isAuthenticated = true;
       })
       .addCase(getUser.rejected, (state) => {
