@@ -32,7 +32,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         </>
         <>
           <NavLink
-            to='/profile/orders'
+            to='/feed'
             className={({ isActive }) =>
               clsx({
                 [styles.link]: !isActive,
