@@ -7,12 +7,16 @@ interface IOrderState {
   orderData: TOrder | null;
   isOrderRequest: boolean;
   orderByNumber: TOrder | null;
+  isLoading: boolean;
+  error: string | undefined;
 }
 
-const initialState: IOrderState = {
+export const initialState: IOrderState = {
   orderData: null,
   isOrderRequest: false,
-  orderByNumber: null
+  orderByNumber: null,
+  isLoading: false,
+  error: undefined
 };
 
 export const orderSlice = createSlice({
@@ -33,19 +37,29 @@ export const orderSlice = createSlice({
     builder
       .addCase(orderBurger.pending, (state) => {
         state.isOrderRequest = true;
+        state.error = undefined;
       })
-      .addCase(orderBurger.rejected, (state) => {
+      .addCase(orderBurger.rejected, (state, action) => {
         state.isOrderRequest = false;
+        state.error = action.error.message!;
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
         state.isOrderRequest = false;
+        state.error = undefined;
         state.orderData = action.payload;
       })
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.isOrderRequest = true;
+        state.error = undefined;
+      })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.isOrderRequest = false;
+        state.error = undefined;
         state.orderByNumber = action.payload[0];
       })
-      .addCase(getUser.rejected, (state) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.isOrderRequest = false;
+        state.error = action.error.message!;
       });
   }
 });

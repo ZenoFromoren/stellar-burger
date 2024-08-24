@@ -5,11 +5,15 @@ import { orderBurger } from '../thunks/orderThunks';
 interface IBurgerConstructorState {
   bun: TConstructorIngredient | null;
   burgerConstructoringredients: TConstructorIngredient[];
+  isOrderRequest: boolean;
+  error: string | undefined;
 }
 
-const initialState: IBurgerConstructorState = {
+export const initialState: IBurgerConstructorState = {
   bun: null,
-  burgerConstructoringredients: []
+  burgerConstructoringredients: [],
+  isOrderRequest: false,
+  error: undefined
 };
 
 export const burgerConstructorSlice = createSlice({
@@ -62,9 +66,19 @@ export const burgerConstructorSlice = createSlice({
     selectIngredients: (state) => state.burgerConstructoringredients
   },
   extraReducers: (builder) => {
+    builder.addCase(orderBurger.pending, (state) => {
+      state.isOrderRequest = true;
+      state.error = undefined;
+    });
     builder.addCase(orderBurger.fulfilled, (state) => {
+      state.isOrderRequest = false;
+      state.error = undefined;
       state.bun = null;
       state.burgerConstructoringredients = [];
+    });
+    builder.addCase(orderBurger.rejected, (state, action) => {
+      state.isOrderRequest = false;
+      state.error = action.error.message!;
     });
   }
 });
