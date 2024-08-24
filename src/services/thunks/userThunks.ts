@@ -4,9 +4,9 @@ import {
   TRegisterData,
   registerUserApi,
   updateUserApi,
-  logoutApi
+  logoutApi,
+  getUserApi
 } from './../../utils/burger-api';
-import { getUserApi } from '@api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setCookie } from '../../utils/cookie';
 

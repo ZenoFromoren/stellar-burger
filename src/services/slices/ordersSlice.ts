@@ -5,10 +5,16 @@ import { getOrdersAll } from '../thunks/ordersThunks';
 
 interface IOrdersState {
   orders: TOrder[];
+  isLoading: boolean;
+  isOrderRequest: boolean;
+  error: string | undefined;
 }
 
-const initialState: IOrdersState = {
-  orders: []
+export const initialState: IOrdersState = {
+  orders: [],
+  isLoading: false,
+  isOrderRequest: false,
+  error: undefined
 };
 
 export const ordersSlice = createSlice({
@@ -24,14 +30,34 @@ export const ordersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(orderBurger.pending, (state) => {
+        state.isOrderRequest = true;
+        state.error = undefined;
+      })
       .addCase(
         orderBurger.fulfilled,
         (state, action: PayloadAction<TOrder>) => {
+          state.isOrderRequest = false;
+          state.error = undefined;
           state.orders.push(action.payload);
         }
       )
+      .addCase(orderBurger.rejected, (state, action) => {
+        state.isOrderRequest = false;
+        state.error = action.error.message!;
+      })
+      .addCase(getOrdersAll.pending, (state) => {
+        state.isLoading = true;
+        state.error = undefined;
+      })
       .addCase(getOrdersAll.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = undefined;
         state.orders = action.payload.orders;
+      })
+      .addCase(getOrdersAll.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message!;
       });
   }
 });

@@ -4,10 +4,14 @@ import { fetchIngredients } from '../thunks/ingredientsThunks';
 
 interface IIngredientsState {
   ingredients: TIngredient[];
+  isLoading: boolean;
+  error: string | undefined;
 }
 
-const initialState: IIngredientsState = {
-  ingredients: []
+export const initialState: IIngredientsState = {
+  ingredients: [],
+  isLoading: false,
+  error: undefined
 };
 
 export const ingredientsSlice = createSlice({
@@ -18,8 +22,18 @@ export const ingredientsSlice = createSlice({
     selectIngredients: (state) => state.ingredients
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchIngredients.pending, (state) => {
+      state.isLoading = true;
+      state.error = undefined;
+    });
     builder.addCase(fetchIngredients.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
       state.ingredients = action.payload;
+    });
+    builder.addCase(fetchIngredients.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message!;
     });
   }
 });
